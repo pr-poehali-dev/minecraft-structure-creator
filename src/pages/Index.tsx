@@ -19,6 +19,7 @@ interface Build {
   image: string;
   steps?: string[];
   tips?: string;
+  photos?: string[];
 }
 
 interface Material {
@@ -31,6 +32,7 @@ const Index = () => {
   const [selectedBuild, setSelectedBuild] = useState<Build | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [myProjects, setMyProjects] = useState<Build[]>([]);
+  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
   
   const [builds, setBuilds] = useState<Build[]>([
     {
@@ -42,7 +44,12 @@ const Index = () => {
       likes: 1247,
       image: '🏰',
       steps: ['Создайте основание из камня 20x20', 'Постройте 4 башни по углам высотой 15 блоков', 'Соедините башни стенами высотой 10 блоков', 'Добавьте деревянные ворота', 'Выкопайте ров вокруг замка глубиной 3 блока', 'Заполните ров водой'],
-      tips: 'Используйте разные виды камня для текстуры. Добавьте флаги на башнях из шерсти и заборов.'
+      tips: 'Используйте разные виды камня для текстуры. Добавьте флаги на башнях из шерсти и заборов.',
+      photos: [
+        'https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=800',
+        'https://images.unsplash.com/photo-1595815771614-ade9d652a65d?w=800',
+        'https://images.unsplash.com/photo-1596402184320-417e7178b2cd?w=800'
+      ]
     },
     {
       id: 2,
@@ -53,7 +60,11 @@ const Index = () => {
       likes: 892,
       image: '🏠',
       steps: ['Создайте платформу из бетона 15x15', 'Постройте стены из кварца высотой 5 блоков', 'Установите большие окна из стекла', 'Создайте плоскую крышу', 'Выкопайте бассейн 5x8 глубиной 2 блока', 'Добавьте внутреннюю отделку'],
-      tips: 'Используйте белый и серый бетон для контраста. Добавьте светильники внутри для атмосферы.'
+      tips: 'Используйте белый и серый бетон для контраста. Добавьте светильники внутри для атмосферы.',
+      photos: [
+        'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800',
+        'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=800'
+      ]
     },
     {
       id: 3,
@@ -64,7 +75,10 @@ const Index = () => {
       likes: 2103,
       image: '🌾',
       steps: ['Создайте площадку 9x9 из земли', 'В центре разместите воду', 'Засадите землю пшеницей/морковью', 'Под землёй установите воронки', 'Подключите поршни к редстоуну', 'Настройте таймер на повторитель'],
-      tips: 'Используйте компаратор для автоматического сбора. Добавьте сундуки под воронками.'
+      tips: 'Используйте компаратор для автоматического сбора. Добавьте сундуки под воронками.',
+      photos: [
+        'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=800'
+      ]
     },
     {
       id: 4,
@@ -150,68 +164,73 @@ const Index = () => {
       <header className="bg-[#8D6E63] border-b-4 border-[#5D4037] minecraft-shadow sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl md:text-3xl text-white drop-shadow-[2px_2px_0_rgba(0,0,0,0.3)]">
+            <h1 className="text-xl md:text-3xl text-white drop-shadow-[2px_2px_0_rgba(0,0,0,0.3)]">
               ⛏️ MineBuild
             </h1>
-            <nav className="flex gap-2">
+            <nav className="flex gap-1 md:gap-2">
               <Button 
                 onClick={() => window.location.href = '/chatgpt'}
                 variant="ghost" 
-                className="text-white hover:bg-[#5D4037] minecraft-border border-transparent hover:border-white"
+                size="sm"
+                className="text-white hover:bg-[#5D4037] minecraft-border border-transparent hover:border-white px-2 md:px-4"
               >
-                <Icon name="Bot" size={20} className="mr-2" />
-                <span className="hidden sm:inline">AI Помощник</span>
+                <Icon name="Bot" size={18} className="md:mr-2" />
+                <span className="hidden md:inline">AI</span>
               </Button>
-              <Button variant="ghost" className="text-white hover:bg-[#5D4037] minecraft-border border-transparent hover:border-white">
-                <Icon name="User" size={20} />
+              <Button 
+                variant="ghost" 
+                size="sm"
+                className="text-white hover:bg-[#5D4037] minecraft-border border-transparent hover:border-white px-2 md:px-4"
+              >
+                <Icon name="User" size={18} />
               </Button>
             </nav>
           </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-2 md:px-4 py-4 md:py-8">
         <Tabs defaultValue="gallery" className="w-full">
-          <TabsList className="grid w-full grid-cols-5 md:grid-cols-5 bg-[#616161] p-1 gap-1 minecraft-border border-black">
+          <TabsList className="grid w-full grid-cols-5 bg-[#616161] p-0.5 md:p-1 gap-0.5 md:gap-1 minecraft-border border-black">
             <TabsTrigger 
               value="gallery" 
-              className="data-[state=active]:bg-[#7CB342] text-white font-bold minecraft-border border-transparent data-[state=active]:border-black"
+              className="data-[state=active]:bg-[#7CB342] text-white font-bold minecraft-border border-transparent data-[state=active]:border-black text-xs md:text-sm py-2"
             >
-              <Icon name="Image" size={16} className="mr-1" />
-              <span className="hidden sm:inline">Галерея</span>
+              <Icon name="Image" size={14} className="md:mr-1" />
+              <span className="hidden md:inline">Галерея</span>
             </TabsTrigger>
             <TabsTrigger 
               value="constructor" 
-              className="data-[state=active]:bg-[#7CB342] text-white font-bold minecraft-border border-transparent data-[state=active]:border-black"
+              className="data-[state=active]:bg-[#7CB342] text-white font-bold minecraft-border border-transparent data-[state=active]:border-black text-xs md:text-sm py-2"
             >
-              <Icon name="Hammer" size={16} className="mr-1" />
-              <span className="hidden sm:inline">Конструктор</span>
+              <Icon name="Hammer" size={14} className="md:mr-1" />
+              <span className="hidden md:inline">Конструктор</span>
             </TabsTrigger>
             <TabsTrigger 
               value="myprojects" 
-              className="data-[state=active]:bg-[#7CB342] text-white font-bold minecraft-border border-transparent data-[state=active]:border-black"
+              className="data-[state=active]:bg-[#7CB342] text-white font-bold minecraft-border border-transparent data-[state=active]:border-black text-xs md:text-sm py-2"
             >
-              <Icon name="Folder" size={16} className="mr-1" />
-              <span className="hidden sm:inline">Мои проекты</span>
+              <Icon name="Folder" size={14} className="md:mr-1" />
+              <span className="hidden md:inline">Проекты</span>
             </TabsTrigger>
             <TabsTrigger 
               value="materials" 
-              className="data-[state=active]:bg-[#7CB342] text-white font-bold minecraft-border border-transparent data-[state=active]:border-black"
+              className="data-[state=active]:bg-[#7CB342] text-white font-bold minecraft-border border-transparent data-[state=active]:border-black text-xs md:text-sm py-2"
             >
-              <Icon name="Package" size={16} className="mr-1" />
-              <span className="hidden sm:inline">Материалы</span>
+              <Icon name="Package" size={14} className="md:mr-1" />
+              <span className="hidden md:inline">Материалы</span>
             </TabsTrigger>
             <TabsTrigger 
               value="community" 
-              className="data-[state=active]:bg-[#7CB342] text-white font-bold minecraft-border border-transparent data-[state=active]:border-black"
+              className="data-[state=active]:bg-[#7CB342] text-white font-bold minecraft-border border-transparent data-[state=active]:border-black text-xs md:text-sm py-2"
             >
-              <Icon name="Users" size={16} className="mr-1" />
-              <span className="hidden sm:inline">Сообщество</span>
+              <Icon name="Users" size={14} className="md:mr-1" />
+              <span className="hidden md:inline">Чат</span>
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="gallery" className="mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <TabsContent value="gallery" className="mt-3 md:mt-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
               {builds.map((build) => (
                 <Card 
                   key={build.id} 
@@ -265,7 +284,7 @@ const Index = () => {
             </div>
           </TabsContent>
 
-          <TabsContent value="constructor" className="mt-6">
+          <TabsContent value="constructor" className="mt-3 md:mt-6">
             <Card className="minecraft-border border-black minecraft-shadow bg-white max-w-2xl mx-auto">
               <CardHeader>
                 <CardTitle className="text-2xl">Создать постройку</CardTitle>
@@ -328,8 +347,8 @@ const Index = () => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="myprojects" className="mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <TabsContent value="myprojects" className="mt-3 md:mt-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
               {myProjects.length === 0 ? (
                 <Card className="minecraft-border border-black minecraft-shadow bg-white col-span-full">
                   <CardContent className="text-center py-12">
@@ -385,8 +404,8 @@ const Index = () => {
             </div>
           </TabsContent>
 
-          <TabsContent value="materials" className="mt-6">
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <TabsContent value="materials" className="mt-3 md:mt-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
               {materials.map((material, idx) => (
                 <Card 
                   key={idx}
@@ -404,7 +423,7 @@ const Index = () => {
             </div>
           </TabsContent>
 
-          <TabsContent value="community" className="mt-6">
+          <TabsContent value="community" className="mt-3 md:mt-6">
             <div className="max-w-4xl mx-auto">
               <Card className="minecraft-border border-black minecraft-shadow bg-white mb-6">
                 <CardHeader className="text-center">
@@ -488,100 +507,142 @@ const Index = () => {
       </footer>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="minecraft-border border-black minecraft-shadow max-w-3xl bg-white max-h-[90vh]">
+        <DialogContent className="minecraft-border border-black minecraft-shadow w-[95vw] max-w-3xl bg-white max-h-[90vh] p-3 md:p-6">
           {selectedBuild && (
             <>
               <DialogHeader>
-                <div className="text-6xl text-center mb-4">{selectedBuild.image}</div>
-                <DialogTitle className="text-2xl text-center">{selectedBuild.title}</DialogTitle>
-                <DialogDescription className="text-center text-base">
+                <div className="text-4xl md:text-6xl text-center mb-2 md:mb-4">{selectedBuild.image}</div>
+                <DialogTitle className="text-lg md:text-2xl text-center leading-relaxed">{selectedBuild.title}</DialogTitle>
+                <DialogDescription className="text-center text-sm md:text-base">
                   {selectedBuild.description}
                 </DialogDescription>
               </DialogHeader>
               
-              <ScrollArea className="max-h-[60vh] pr-4">
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
-                      <Icon name="Package" size={20} />
-                      Необходимые материалы
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {selectedBuild.materials.map((material, idx) => (
-                        <Badge 
-                          key={idx}
-                          variant="secondary"
-                          className="minecraft-border border-[#8D6E63] bg-[#D7CCC8] text-[#3E2723] font-bold text-base px-3 py-1"
-                        >
-                          {material}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
-                      <Icon name="Zap" size={20} />
-                      Сложность
-                    </h3>
-                    <Badge 
-                      variant={selectedBuild.difficulty === 'Легко' ? 'default' : selectedBuild.difficulty === 'Средне' ? 'secondary' : 'destructive'}
-                      className="minecraft-border border-black font-bold text-base px-4 py-2"
-                    >
-                      {selectedBuild.difficulty}
-                    </Badge>
-                  </div>
-
-                  {selectedBuild.steps && selectedBuild.steps.length > 0 && (
+              <ScrollArea className="max-h-[60vh] pr-2 md:pr-4">
+                <div className="space-y-4 md:space-y-6">
+                  {selectedBuild.photos && selectedBuild.photos.length > 0 && (
                     <div>
-                      <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
-                        <Icon name="ListOrdered" size={20} />
-                        Пошаговая инструкция
+                      <h3 className="font-bold text-base md:text-lg mb-3 flex items-center gap-2">
+                        <Icon name="Images" size={18} />
+                        Фото постройки
                       </h3>
                       <div className="space-y-3">
-                        {selectedBuild.steps.map((step, idx) => (
-                          <div 
-                            key={idx}
-                            className="p-3 minecraft-border border-[#7CB342] bg-[#F1F8E9] flex gap-3"
-                          >
-                            <div className="minecraft-border border-black bg-[#7CB342] text-white font-bold px-3 py-1 h-fit">
-                              {idx + 1}
-                            </div>
-                            <p className="font-normal flex-1">{step}</p>
+                        <div className="relative minecraft-border border-black overflow-hidden bg-[#F5F5F5]">
+                          <img 
+                            src={selectedBuild.photos[selectedPhotoIndex]} 
+                            alt={`${selectedBuild.title} - фото ${selectedPhotoIndex + 1}`}
+                            className="w-full h-48 md:h-64 object-cover"
+                          />
+                        </div>
+                        {selectedBuild.photos.length > 1 && (
+                          <div className="flex gap-2 overflow-x-auto pb-2">
+                            {selectedBuild.photos.map((photo, idx) => (
+                              <button
+                                key={idx}
+                                onClick={() => setSelectedPhotoIndex(idx)}
+                                className={`minecraft-border flex-shrink-0 w-16 h-16 md:w-20 md:h-20 overflow-hidden ${
+                                  idx === selectedPhotoIndex 
+                                    ? 'border-[#7CB342] minecraft-shadow' 
+                                    : 'border-[#616161] opacity-60 hover:opacity-100'
+                                }`}
+                              >
+                                <img 
+                                  src={photo} 
+                                  alt={`Миниатюра ${idx + 1}`}
+                                  className="w-full h-full object-cover"
+                                />
+                              </button>
+                            ))}
                           </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  
+                  <div className="space-y-4 md:space-y-6">
+                    <div>
+                      <h3 className="font-bold text-base md:text-lg mb-2 md:mb-3 flex items-center gap-2">
+                        <Icon name="Package" size={18} />
+                        Материалы
+                      </h3>
+                      <div className="flex flex-wrap gap-1.5 md:gap-2">
+                        {selectedBuild.materials.map((material, idx) => (
+                          <Badge 
+                            key={idx}
+                            variant="secondary"
+                            className="minecraft-border border-[#8D6E63] bg-[#D7CCC8] text-[#3E2723] font-bold text-xs md:text-sm px-2 md:px-3 py-1"
+                          >
+                            {material}
+                          </Badge>
                         ))}
                       </div>
                     </div>
-                  )}
 
-                  {selectedBuild.tips && (
                     <div>
-                      <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
-                        <Icon name="Lightbulb" size={20} />
-                        Советы
+                      <h3 className="font-bold text-base md:text-lg mb-2 md:mb-3 flex items-center gap-2">
+                        <Icon name="Zap" size={18} />
+                        Сложность
                       </h3>
-                      <div className="p-4 minecraft-border border-[#FFA726] bg-[#FFF3E0]">
-                        <p className="font-normal">{selectedBuild.tips}</p>
-                      </div>
+                      <Badge 
+                        variant={selectedBuild.difficulty === 'Легко' ? 'default' : selectedBuild.difficulty === 'Средне' ? 'secondary' : 'destructive'}
+                        className="minecraft-border border-black font-bold text-sm md:text-base px-3 md:px-4 py-1.5 md:py-2"
+                      >
+                        {selectedBuild.difficulty}
+                      </Badge>
                     </div>
-                  )}
 
-                  <div className="flex gap-2">
-                    <Button 
-                      onClick={() => handleSaveToMyProjects(selectedBuild)}
-                      className="flex-1 minecraft-border border-black bg-[#7CB342] hover:bg-[#689F38] font-bold"
-                    >
-                      <Icon name="Save" size={20} className="mr-2" />
-                      Сохранить в мои проекты
-                    </Button>
-                    <Button 
-                      onClick={() => handleLike(selectedBuild.id)}
-                      variant="outline"
-                      className="minecraft-border border-[#EF5350] hover:bg-[#EF5350] hover:text-white font-bold"
-                    >
-                      <Icon name="Heart" size={20} className="mr-2" />
-                      {selectedBuild.likes}
-                    </Button>
+                    {selectedBuild.steps && selectedBuild.steps.length > 0 && (
+                      <div>
+                        <h3 className="font-bold text-base md:text-lg mb-2 md:mb-3 flex items-center gap-2">
+                          <Icon name="ListOrdered" size={18} />
+                          Инструкция
+                        </h3>
+                        <div className="space-y-2 md:space-y-3">
+                          {selectedBuild.steps.map((step, idx) => (
+                            <div 
+                              key={idx}
+                              className="p-2 md:p-3 minecraft-border border-[#7CB342] bg-[#F1F8E9] flex gap-2 md:gap-3"
+                            >
+                              <div className="minecraft-border border-black bg-[#7CB342] text-white font-bold px-2 md:px-3 py-0.5 md:py-1 h-fit text-xs md:text-base">
+                                {idx + 1}
+                              </div>
+                              <p className="font-normal flex-1 text-xs md:text-base">{step}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {selectedBuild.tips && (
+                      <div>
+                        <h3 className="font-bold text-base md:text-lg mb-2 md:mb-3 flex items-center gap-2">
+                          <Icon name="Lightbulb" size={18} />
+                          Советы
+                        </h3>
+                        <div className="p-3 md:p-4 minecraft-border border-[#FFA726] bg-[#FFF3E0]">
+                          <p className="font-normal text-xs md:text-base">{selectedBuild.tips}</p>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="flex flex-col md:flex-row gap-2">
+                      <Button 
+                        onClick={() => handleSaveToMyProjects(selectedBuild)}
+                        className="flex-1 minecraft-border border-black bg-[#7CB342] hover:bg-[#689F38] font-bold text-sm md:text-base"
+                      >
+                        <Icon name="Save" size={18} className="mr-2" />
+                        <span className="hidden md:inline">Сохранить в мои проекты</span>
+                        <span className="md:hidden">Сохранить</span>
+                      </Button>
+                      <Button 
+                        onClick={() => handleLike(selectedBuild.id)}
+                        variant="outline"
+                        className="minecraft-border border-[#EF5350] hover:bg-[#EF5350] hover:text-white font-bold text-sm md:text-base"
+                      >
+                        <Icon name="Heart" size={18} className="mr-2" />
+                        {selectedBuild.likes}
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </ScrollArea>
